@@ -1,0 +1,46 @@
+# Python
+
+**pycache**/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+
+venv/
+env/
+.venv/
+
+# Jupyter Notebook checkpoints
+
+.ipynb_checkpoints/
+
+# Mac OS
+
+.DS_Store
+
+# Logs and temporary files
+
+*.log
+*.tmp
+*.bak
+
+# Streamlit
+
+.streamlit/
+
+# Model files
+
+models/*.h5
+scaler/*.pkl
+
+# Numpy or large dataset files
+
+*.npy
+*.csv
+
+# IDE files
+
+.vscode/
+.idea/
