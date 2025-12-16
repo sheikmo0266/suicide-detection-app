@@ -13,14 +13,6 @@ from transformers import DistilBertTokenizer, DistilBertModel
 from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Layer, SeparableConv1D, LayerNormalization, Dense, GlobalAveragePooling1D, Multiply, Add, Conv1D, Dropout
 import pickle
-print("Streamlit:", st.__version__)
-print("TensorFlow:", tf.__version__)
-print("PyTorch:", torch.__version__)
-print("Transformers:", transformers.__version__)
-print("NumPy:", np.__version__)
-print("Pandas:", pd.__version__)
-
-
 # ----------------------
 # Custom Layers
 # ----------------------
@@ -48,7 +40,15 @@ class ConvMixerBlock(tf.keras.layers.Layer):
         if self.proj is not None:
             res = self.proj(res)
         return Add()([x, res])
-
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "filters": self.filters,
+            "kernel_size": self.kernel_size,
+            "dropout_rate": self.dropout_rate,
+            "dilation_rate": self.dilation_rate,
+        })
+        return config
 class ChannelSelfAttention(tf.keras.layers.Layer):
     def __init__(self, filters=128, reduction=8, **kwargs):
         super().__init__(**kwargs)
@@ -62,6 +62,13 @@ class ChannelSelfAttention(tf.keras.layers.Layer):
         x = self.dense2(x)
         x = tf.expand_dims(x, axis=1)
         return Multiply()([inputs, x])
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "filters": self.filters,
+            "reduction": self.reduction
+        })
+        return config
 
 # ----------------------
 # Load Model & Scaler
@@ -95,26 +102,10 @@ except Exception as e:
     st.error(f"Scaler load failed: {e}")
     st.stop()
 
-
-
-# ----------------------
-# Load DistilBERT
-# ----------------------
-import torch
-from transformers import DistilBertTokenizer, DistilBertModel
-import html, re
-import numpy as np
-
-# ------------------------------------------
-# FIX for meta tensor issue in transformers
-# ------------------------------------------
-
-
 # ----------------------
 # Device & Model
 # ----------------------
-import torch
-from transformers import DistilBertTokenizer, DistilBertModel
+
 
 @st.cache_resource
 def load_bert():
