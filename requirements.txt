@@ -1,5 +1,6 @@
 numpy>=2.1.0,<=2.3.5
 tensorflow==2.20.0
+transformers>=4.50.0
 torch==2.9.1
 streamlit==1.52.1
 rich>=10.14.0
