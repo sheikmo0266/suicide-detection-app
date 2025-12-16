@@ -66,23 +66,34 @@ class ChannelSelfAttention(tf.keras.layers.Layer):
 # ----------------------
 # Load Model & Scaler
 # ----------------------
+MODEL_PATH = os.path.join("models", "my_model.h5")
+
+model = None
 try:
     model = load_model(
-        'my_model.h5',
-        custom_objects={'ConvMixerBlock': ConvMixerBlock, 'ChannelSelfAttention': ChannelSelfAttention}
+        MODEL_PATH,
+        custom_objects={
+            "ConvMixerBlock": ConvMixerBlock,
+            "ChannelSelfAttention": ChannelSelfAttention
+        }
     )
-    print("Model loaded successfully!")
 except Exception as e:
-    print("Error loading model:", e)
+    st.error(f"Model loading failed: {e}")
+    st.stop()
+
+
+SCALER_PATH = os.path.join("scaler", "scaler.pkl")
 
 try:
-    with open('scaler.pkl', 'rb') as f:
+    with open(SCALER_PATH, "rb") as f:
         scaler = pickle.load(f)
-    X_mean = scaler['mean']
-    X_std = scaler['std']
-    print("Scaler loaded successfully!")
+
+    X_mean = scaler["mean"]
+    X_std = scaler["std"]
+
 except Exception as e:
-    print("Error loading scaler:", e)
+    st.error(f"Scaler load failed: {e}")
+    st.stop()
 
 
 
