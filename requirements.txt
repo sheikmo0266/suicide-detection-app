@@ -1,8 +1,8 @@
-pip>=25.3
-numpy>=1.26.4,<2
-pandas==2.2.3
-scikit-learn==1.2.2
+numpy>=2.1.0,<=2.3.5
 tensorflow==2.20.0
 torch==2.9.1
-transformers==4.52.3
 streamlit==1.52.1
+rich>=10.14.0
+markdown-it-py==4.0.0
+pygments==2.19.2
+mdurl==0.1.2
